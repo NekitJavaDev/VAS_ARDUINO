@@ -8,6 +8,7 @@
 #define ONE_WIRE_BUS 5 //датчик температуры (цифровой вход)
 #define GERKON_PIN 4 //геркон (цифровой вход)
 #define VOLTAGE_PIN A4 //датчик измерения напряжения (Voltage Sensor)
+#define SMOKE_SENSOR_PIN A0 //датчик дыма
 #define R1_VOLTAGE 30000.0 //R1(Voltage Sensor)
 #define R2_VOLTAGE 7500.0 //R2(Voltage Sensor) 
 //#define U_REF 5.0 //опорное напряжение (Voltage Sensor) 
@@ -26,6 +27,7 @@ struct SEND_DATA_STRUCTURE {
   float temp;
   int isOpen;
   float voltage;
+  int smoke;
 };
 
 struct RECEIVE_DATA_STRUCTURE {
@@ -46,40 +48,44 @@ void setup() {
   pinMode(GERKON_PIN, INPUT);
   digitalWrite(GERKON_PIN, HIGH);
   pinMode(VOLTAGE_PIN, INPUT);
+  pinMode(SMOKE_SENSOR_PIN, INPUT);
   
   sensor.begin();
   sensor.setResolution(12);
 }
+
+int smoke = 0;
 
 void loop() {  
   sensor.requestTemperatures();  
   float temperature = sensor.getTempCByIndex(0);
   int isOpen = digitalRead(GERKON_PIN);
   float voltage = (analogRead(VOLTAGE_PIN) * Uin) / 1024.0 / 10;
-  Serial.println("----------------");
-  Serial.print("isOpen int value = ");
-   Serial.println(isOpen);
-  Serial.print("After read value");
-  String convertIsOpenDoorValue = isOpen ? "Yes" : "No";
-  Serial.print("Door is open = ");
-  Serial.println(convertIsOpenDoorValue);
-  Serial.println("----------------");
+  smoke = analogRead(SMOKE_SENSOR_PIN); // 200-300 нормальная концентрация, >700 - WARNING!
   
-  delay(100);
+//  Serial.print("After read value");
+  Serial.print("Smoke value = ");
+  Serial.println(smoke);
+  
+  delay(50);
   
   if (ETrx.receiveData()) {    
     txdata.ID = RS485ID;
     txdata.temp = temperature;
     txdata.isOpen = isOpen;
     txdata.voltage = voltage;
+    txdata.smoke = smoke;
     
     digitalWrite(DIR, HIGH); // включаем передачу
-    delay(500);
+    delay(100);
     Serial.println("----------------");
     Serial.print("Before send by RS485");
     Serial.print("Door is open = ");
+    String convertIsOpenDoorValue = isOpen ? "Yes" : "No";
     Serial.println(convertIsOpenDoorValue);
     Serial.println("----------------");
+    Serial.print("Smoke value = ");
+    Serial.println(txdata.smoke);
     ETtx.sendData(); //отправляем на управляющее устройство
     delay(50);
     digitalWrite(DIR, LOW);
