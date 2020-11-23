@@ -23,11 +23,11 @@ SoftwareSerial RS485Serial(8, 9);
 EasyTransfer ETtx, ETrx;
 
 struct SEND_DATA_STRUCTURE {
-  int ID;
-  float temp;
-  int isOpen;
-  float voltage;
-  int smoke;
+    int ID;
+    float temp;
+    int isOpen;
+    float voltage;
+    int smoke;
 };
 
 struct RECEIVE_DATA_STRUCTURE {
