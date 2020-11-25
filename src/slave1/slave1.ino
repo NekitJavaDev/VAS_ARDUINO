@@ -64,8 +64,8 @@ void loop() {
   smoke = analogRead(SMOKE_SENSOR_PIN); // 200-300 нормальная концентрация, >700 - WARNING!
   
 //  Serial.print("After read value");
-  Serial.print("Smoke value = ");
-  Serial.println(smoke);
+//  Serial.print("Smoke value = ");
+//  Serial.println(smoke);
   
   delay(50);
   
@@ -80,12 +80,17 @@ void loop() {
     delay(100);
     Serial.println("----------------");
     Serial.print("Before send by RS485");
+    Serial.print("Device ID = ");
+    Serial.println(RS485ID);
+    Serial.print("Temperature = ");
+    Serial.println(temperature);
     Serial.print("Door is open = ");
     String convertIsOpenDoorValue = isOpen ? "Yes" : "No";
     Serial.println(convertIsOpenDoorValue);
-    Serial.println("----------------");
     Serial.print("Smoke value = ");
     Serial.println(txdata.smoke);
+    Serial.println("----------------");
+
     ETtx.sendData(); //отправляем на управляющее устройство
     delay(50);
     digitalWrite(DIR, LOW);
