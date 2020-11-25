@@ -4,11 +4,13 @@
 #include <PCD8544.h>
 #include <iarduino_GSM.h>
 
-#define DIR 10
-//#define GERKON_LED_PIN 1...8
-#define GERKON_LED_PIN_DEVICE_2 A4
-//#define interval 10000
-#define interval 5000
+#define DIR 10 //отправка СМС
+#define GERKON_LED_PIN_DEVICE_1 A1 
+#define GERKON_LED_PIN_DEVICE_2 A2
+#define SMOKE_LED_PIN_DEVICE_1 A3
+#define SMOKE_LED_PIN_DEVICE_2 A5
+#define interval 5000 //10000
+
 SoftwareSerial softSerial(12, 11); //tx rx
 SoftwareSerial RS485Serial(8, 9);
 
@@ -47,6 +49,7 @@ struct RECEIVE_DATA_RS485
   float temp;
   int isOpen;
   float voltage;
+  int smoke;
 };
 
 struct SEND_DATA_RS485
@@ -74,7 +77,10 @@ void setup()
   ETtx.begin(details(txdata), &RS485Serial);
 
   pinMode(DIR, OUTPUT);
+  pinMode(GERKON_LED_PIN_DEVICE_1, OUTPUT);
   pinMode(GERKON_LED_PIN_DEVICE_2, OUTPUT);
+  pinMode(SMOKE_LED_PIN_DEVICE_1, OUTPUT);
+  pinMode(SMOKE_LED_PIN_DEVICE_2, OUTPUT);
   digitalWrite(DIR, LOW);
 
   lcd.setCursor(0, 0);
@@ -94,8 +100,9 @@ void loop()
   if (currentMillis - previousMillis > interval)
   {
     previousMillis = currentMillis;
-    if (previousMillis > currentMillis)
-      previousMillis = 0;
+    if (previousMillis > currentMillis){
+        previousMillis = 0;
+    }
 
     IDsend++;
 
@@ -182,43 +189,42 @@ void loop()
 */
   if (ETrx.receiveData())
   {
+    String convertIsOpenDoorValue; // String значение текущего положения двери - open/close
     char outstr[4];
     switch (rxdata.ID)
     {
     case 1:
-//      if(rxdata.isOpen == 1){
-//        digitalWrite(GERKON_LED_PIN, HIGH);
-//      }else{
-//        digitalWrite(GERKON_LED_PIN, LOW);
-//      }
+      turnOnOrOffLedGerkonPins(1);
+      turnOnOrOffLedSmokePins(1);
       
       lcd.setCursor(0, 2);
 //      lcd.print("D:" + String(rxdata.ID) + " T:" + String(rxdata.temp));
       lcd.print("D:" + String(rxdata.ID) + " T:" + dtostrf(rxdata.temp,2,1,outstr));
       
-      Serial.println("Device 1 ID: " + String(rxdata.ID));
+      Serial.println("Device 1 with ID: " + String(rxdata.ID));
       Serial.println("Temp: " + String(rxdata.temp));
-//      Serial.println("Door is open ?: " + String(rxdata.isOpen));
+      Serial.print("Door is = ");
+      convertIsOpenDoorValue = rxdata.isOpen ? "open" : "close";
+      Serial.println(convertIsOpenDoorValue);
+      Serial.println("Smoke: " + String(rxdata.smoke));
 
       changeStateDevices(rxdata.ID, String(rxdata.temp));
       break;
 
     case 2:
-      if(rxdata.isOpen == 1){
-        digitalWrite(GERKON_LED_PIN_DEVICE_2, HIGH);
-      }else{
-        digitalWrite(GERKON_LED_PIN_DEVICE_2, LOW);
-      }
-      
+      turnOnOrOffLedGerkonPins(2);
+      turnOnOrOffLedSmokePins(2);
+            
       lcd.setCursor(0, 3);
       lcd.print("D:" + String(rxdata.ID) + " T:" + dtostrf(rxdata.temp,2,1,outstr));
 //      lcd.print("D:" + String(rxdata.ID) + " T:" + dtostrf(rxdata.temp,2,1,outstr) + " G:" + String(rxdata.isOpen));
   
       Serial.println("Device 2 with ID: " + String(rxdata.ID));
       Serial.println("Temp: " + String(rxdata.temp));
-      Serial.println("Gerkon int value = " + String(rxdata.isOpen));
-      Serial.print("Door is open ?: ");
-      Serial.println(rxdata.isOpen == 1 ? "Yes" : "No");
+      Serial.print("Door is = ");
+      convertIsOpenDoorValue = rxdata.isOpen ? "open" : "close";
+      Serial.println(convertIsOpenDoorValue);
+      Serial.println("Smoke: " + String(rxdata.smoke));
 
       changeStateDevices(rxdata.ID, String(rxdata.temp));
       break;
@@ -238,9 +244,9 @@ void sendCmdRS485(int id, int cmd)
   delay(10);
   txdata.ID = id;
   txdata.cmd = cmd;
-  Serial.println("SENDING");
+  Serial.println("SENDING to device with ID = " + String(id));
   ETtx.sendData();
-  delay(10);
+  delay(5);
   digitalWrite(DIR, LOW);
 }
 
@@ -264,8 +270,56 @@ void changeStateDevices(int id, String temp)
   }
 }
 
-int isAllowedPhone(String phone){
-  
+void turnOnOrOffLedGerkonPins(int deviceId){
+    switch (deviceId){
+      case 1:
+      if(rxdata.isOpen == 1){
+        digitalWrite(GERKON_LED_PIN_DEVICE_1, HIGH);
+      }else{
+        digitalWrite(GERKON_LED_PIN_DEVICE_1, LOW);
+      }
+      break;
+      
+      case 2:
+      if(rxdata.isOpen == 1){
+        digitalWrite(GERKON_LED_PIN_DEVICE_2, HIGH);
+      }else{
+        digitalWrite(GERKON_LED_PIN_DEVICE_2, LOW);
+      }
+      break;
 
-  return 0;
+      default:
+      Serial.print("Error turning on/off LED GERKON pin with ID device = ");
+      Serial.println(deviceId);  
+      break;
+    }
 }
+
+void turnOnOrOffLedSmokePins(int deviceId){
+    switch (deviceId){
+      case 1:
+      if(rxdata.smoke > 700){
+        digitalWrite(SMOKE_LED_PIN_DEVICE_1, HIGH);
+      }else{
+        digitalWrite(SMOKE_LED_PIN_DEVICE_1, LOW);
+      }
+      break;
+      
+      case 2:
+      if(rxdata.smoke > 700){
+        digitalWrite(SMOKE_LED_PIN_DEVICE_2, HIGH);
+      }else{
+        digitalWrite(SMOKE_LED_PIN_DEVICE_2, LOW);
+      }
+      break;
+
+      default:
+      Serial.print("Error turning on/off SMOKE GERKON pin with ID device = ");
+      Serial.println(deviceId);  
+      break;
+    }
+}
+
+//int isAllowedPhone(String phone){
+//  return 0;
+//}
