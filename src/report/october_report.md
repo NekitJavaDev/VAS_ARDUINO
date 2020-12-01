@@ -133,7 +133,7 @@
 ```
 Далее объявляем переменные U_REF (опорное напряжение) и Uin (вычисление максимума входного напряжения):
 ```C++
-    #define U_REF = 5
+    #define U_REF = 5 //or simply HIGH (5V)
     float Uin = U_REF * ((R1_VOLTAGE + R2_VOLTAGE) / R2_VOLTAGE);
 ```
 В функцию setup() добавляем, что аналоговый пин A4 работает на вход, то есть будет считывать показания:
@@ -150,31 +150,31 @@
 ```C++  
     ------------------------------------------------------------
     sensor.requestTemperatures();  
-  	float temperature = sensor.getTempCByIndex(0);	
+    float temperature = sensor.getTempCByIndex(0);	
     float voltage = (analogRead(VOLTAGEPIN) * Uin) / 1024.0 /10;	
-	delay(50);
+    delay(50);
     ------------------------------------------------------------
 ```
 Для проверки правильности преобразования показаний, необходимо добавить поле voltage в отправляемую по RS485 объявленную структуру данных:
 ```C++
     struct SEND_DATA_STRUCTURE {
-      		int ID;
-      		float temp;
-      		float voltage;
+        int ID;
+      	float temp;
+      	float voltage;
     };
 ```
 Завершающим этапом отправляем показания, считанные из цепи и записанные в переменную voltage, предварительно записав значение в саму структуру данных:
 ```C++
     if (ETrx.receiveData()) {    
             txdata.ID = RS485ID;
-        	txdata.temp = temperature;
-        	txdata.voltage = voltage;
+            txdata.temp = temperature;
+            txdata.voltage = voltage;
         
-        	digitalWrite(DIR, HIGH); // включаем передачу
-        	delay(50);
-        	ETtx.sendData(); //отправляем на управляющее устройство
-        	delay(50);
-        	digitalWrite(DIR, LOW);
+            digitalWrite(DIR, HIGH); // включаем передачу
+            delay(50);
+            ETtx.sendData(); //отправляем на управляющее устройство
+            delay(50);
+            digitalWrite(DIR, LOW);
     }
 ```
 Для тестирования работоспособности модуля, нужно подключить обычную солевую батарейку «AA», которая на выходе должна давать напряжение от 1,1V (в разряженном состоянии) до 1,5V:
