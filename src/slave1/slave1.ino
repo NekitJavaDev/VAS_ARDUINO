@@ -60,12 +60,8 @@ void loop() {
   sensor.requestTemperatures();  
   float temperature = sensor.getTempCByIndex(0);
   int isOpen = digitalRead(GERKON_PIN);
-  float voltage = (analogRead(VOLTAGE_PIN) * Uin) / 1024.0 / 10;
-  smoke = analogRead(SMOKE_SENSOR_PIN); // 200-300 нормальная концентрация, >700 - WARNING!
-  
-//  Serial.print("After read value");
-//  Serial.print("Smoke value = ");
-//  Serial.println(smoke);
+  float voltage = (analogRead(VOLTAGE_PIN) * Uin) / 1024.0;
+  smoke = analogRead(SMOKE_SENSOR_PIN); // <1000 нормальная концентрация, >2000 - WARNING!
   
   delay(50);
   
