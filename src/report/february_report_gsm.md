@@ -19,7 +19,7 @@
 
 Для срабатывания датчика с герконом (определяющий открытие двери) было подобрано идеальное расстояния срабатывания от самого геркона к монтированному на стену магниту. Расположение компонентов внутри удалённых объектов изображено на рисунке 3. 
 <p align="center">
-  <img src="https://github.com/NekitJavaDev/VAS_ARDUINO/blob/master/src/img/february/3_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2_%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B8_%D1%83%D0%B4%D0%B0%D0%BB%D1%91%D0%BD%D0%BD%D1%8B%D1%85_%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%BE%D0%B2_(%D0%B2%D0%B8%D0%B4_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83).png/>
+  <img src="https://github.com/NekitJavaDev/VAS_ARDUINO/blob/master/src/img/february/3_%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D0%BE%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2_%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B8_%D1%83%D0%B4%D0%B0%D0%BB%D1%91%D0%BD%D0%BD%D1%8B%D1%85_%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%BE%D0%B2_(%D0%B2%D0%B8%D0%B4_%D1%81%D0%B2%D0%B5%D1%80%D1%85%D1%83).png/">
 </p>
 <p align="center">Рисунок 3 – Расположение компонентов внутри удалённых объектов (вид сверху)</p>
 
