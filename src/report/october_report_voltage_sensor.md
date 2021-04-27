@@ -94,7 +94,7 @@
 <p align="center">
   <img src="https://github.com/NekitJavaDev/VAS_ARDUINO/blob/master/src/img/october/3_%D0%B2%D0%BD%D0%B5%D1%88%D0%BD%D0%B8%D0%B9_%D0%B2%D0%B8%D0%B4_%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8F_Arduino_Voltage_Sensor.jpg"/>
 </p>
-<p align="center">Рисунок 3 — Внешний вид модуля Arduino Voltage <Sensor></Sensor></p>
+<p align="center">Рисунок 3 — Внешний вид модуля Arduino Voltage Sensor</p>
 
 В нем уже предустановлены резисторы сопротивлением 30 кОм и 7,5 кОм. Любая модель из всевозможных разновидностей плат Arduino 
 имеет максимальную границу входного напряжения – 5 Вольт. Для измерения входного напряжения до 25 вольт отлично подойдёт Voltage Sensor, 
