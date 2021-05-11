@@ -38,9 +38,9 @@ void setup()
 
 void loop() 
 {                                                 
-    while (Serial.available() > 0) {  // Если есть какие либо данные в последовательном порту и ID = 1
+    while (Serial.available() > 0) {  // Если есть какие либо данные в последовательном порту и ID = 2
       String strId = Serial.readString();      
-      if (strId == "1") {  // Проверям, что запрос пришёл имеено на нужное slave устройство
+      if (strId == String(RS485_ID)) {  // Проверям, что запрос пришёл на нужное slave устройство
           digitalWrite(RS485_DIR, HIGH);
           delay(10);
 
@@ -76,7 +76,7 @@ void startPollingSensors()
     float voltage = uOut / U_REF;
     slave["voltage"] = voltage;
     
-    int smoke = analogRead(SMOKE_SENSOR_PIN);  // 100-500 нормальная концентрация, > 600 - WARNING!
+    int smoke = analogRead(SMOKE_SENSOR_PIN);  // 100-500 - OK, > 700 - WARNING!
     slave["smoke"] = smoke;
 
     int humidity = dht.readHumidity();  
