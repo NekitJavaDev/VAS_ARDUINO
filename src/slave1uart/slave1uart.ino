@@ -38,7 +38,7 @@ void setup()
 
 void loop() 
 {                                                 
-    while (Serial.available() > 0) {  // Если есть какие либо данные в последовательном порту и ID = 2
+    while (Serial.available() > 0) {  // Если есть какие либо данные в последовательном порту и ID = 1
       String strId = Serial.readString();      
       if (strId == String(RS485_ID)) {  // Проверям, что запрос пришёл на нужное slave устройство
           digitalWrite(RS485_DIR, HIGH);
