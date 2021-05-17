@@ -43,14 +43,14 @@ void setup()
     digitalWrite(RS485_DIR, LOW);
     
     lcd.begin();
-    lcd.setCursor(6, 0);  // Центр первой строки
-    lcd.print("Devices:");
-    lcd.setCursor(0, 1);  // Device 1
+    lcd.setCursor(0, 0);  // Device 1
     lcd.print("1");
-    lcd.setCursor(0, 2);  // Device 2
+    lcd.setCursor(0, 1);  // Device 2
     lcd.print("2");
-    lcd.setCursor(0, 3);  // Device 3
+    lcd.setCursor(0, 2);  // Device 3
     lcd.print("3");
+    lcd.setCursor(0, 3);  // Device 3
+    lcd.print("4");
 }
 
 void loop()
@@ -69,27 +69,37 @@ void loop()
 
         switch (IDsend) {
             case 1:
-              lcd.setCursor(1, 1);
+              lcd.setCursor(1, 0);
               lcd.print("                   ");  // Очистка 1-ой строки  
-              lcd.setCursor(2, 1);
+              lcd.setCursor(2, 0);
               lcd.print("Send to Device 1");
               sendCmdRS485(IDsend, 1);
             break;
             case 2:
-              lcd.setCursor(1, 2);
+              lcd.setCursor(1, 1);
               lcd.print("                   ");  // Очистка 2-ой строки  
-              lcd.setCursor(2, 2);
+              lcd.setCursor(2, 1);
               lcd.print("Send to Device 2");
-              sendCmdRS485(IDsend, 1);
-            break;
-            case 3:
-              lcd.setCursor(1, 3);
-              lcd.print("                   ");  // Очистка 3-ой строки  
-              lcd.setCursor(2, 3);
-              lcd.print("Send to Device 3");
               sendCmdRS485(IDsend, 1);
               IDsend = 0;
             break;
+            /*
+            case 3:
+              lcd.setCursor(1, 2);
+              lcd.print("                   ");  // Очистка 3-ой строки  
+              lcd.setCursor(2, 2);
+              lcd.print("Send to Device 3");
+              sendCmdRS485(IDsend, 1);
+            break;
+            case 4:
+              lcd.setCursor(1, 3);
+              lcd.print("                   ");  // Очистка 4-ой строки  
+              lcd.setCursor(2, 3);
+              lcd.print("Send to Device 4");
+              sendCmdRS485(IDsend, 1);
+              IDsend = 0;
+            break;
+            */            
             default:
               Serial.println("DEFAULT HAPPENED");
             break;
@@ -129,29 +139,40 @@ void loop()
             // turnOnOrOffLedGerkonPins(1, doorIs);
             // turnOnOrOffLedSmokePins(1, smoke);
             // turnOnOrOffLedVoltagePins(1, voltage);
-            lcd.setCursor(0,1);
+            lcd.setCursor(0, 0);
             lcd.print("                    "); //Очистка 1-ой строки
-            lcd.setCursor(0,1);
+            lcd.setCursor(0, 0);
             lcd.print("1 T:" + String(dtostrf(temp,2,1,outStrTemperature)) + " V:" + String(dtostrf(voltage,2,1,outStrVoltage)) + " H:" + humidity + "%"); 
         break;
         case 2:
             // turnOnOrOffLedGerkonPins(2, doorIs);
             // turnOnOrOffLedSmokePins(2, smoke);
             // turnOnOrOffLedVoltagePins(2, voltage);
-            lcd.setCursor(0,2);
+            lcd.setCursor(0, 1);
             lcd.print("                    "); //Очистка 2-ой строки
-            lcd.setCursor(0,2);
+            lcd.setCursor(0, 1);
             lcd.print("2 T:" + String(dtostrf(temp,2,1,outStrTemperature)) + " V:" + String(dtostrf(voltage,2,1,outStrVoltage)) + " H:" + humidity + "%"); 
         break;
+        /*
         case 3:
             // turnOnOrOffLedGerkonPins(3, doorIs);
             // turnOnOrOffLedSmokePins(3, smoke);
             // turnOnOrOffLedVoltagePins(3, voltage);
-            lcd.setCursor(0,3);
+            lcd.setCursor(0, 2);
             lcd.print("                    "); //Очистка 3-ей строки
-            lcd.setCursor(0,3);
+            lcd.setCursor(0, 2);
             lcd.print("3 T:" + String(dtostrf(temp,2,1,outStrTemperature)) + " V:" + String(dtostrf(voltage,2,1,outStrVoltage)) + " H:" + humidity + "%"); 
         break;
+        case 4:
+            // turnOnOrOffLedGerkonPins(4, doorIs);
+            // turnOnOrOffLedSmokePins(4, smoke);
+            // turnOnOrOffLedVoltagePins(4, voltage);
+            lcd.setCursor(0, 3);
+            lcd.print("                    "); //Очистка 4-ой строки
+            lcd.setCursor(0, 3);
+            lcd.print("4 T:" + String(dtostrf(temp,2,1,outStrTemperature)) + " V:" + String(dtostrf(voltage,2,1,outStrVoltage)) + " H:" + humidity + "%"); 
+        break;
+        */
         default:
             Serial.print("Incorrect input ID from slave device = ");
             Serial.println(id);
@@ -275,21 +296,21 @@ void turnOnOrOffLedVoltagePins(int deviceId, float voltage) {
             Serial.println(deviceId); 
         break;
         case 1:
-            if (voltage < 1.0f) {
+            if (voltage < 0.9f) {
               digitalWrite(SMOKE_LED_PIN_DEVICE_1, HIGH);
             } else {
               digitalWrite(SMOKE_LED_PIN_DEVICE_1, LOW);
             }
         break;      
         case 2:
-          if (voltage < 1.0f) {
+          if (voltage < 0.9f) {
             digitalWrite(SMOKE_LED_PIN_DEVICE_2, HIGH);
           } else {
             digitalWrite(SMOKE_LED_PIN_DEVICE_2, LOW);
           }
         break;
         case 3:
-          if (voltage < 1.0f) {
+          if (voltage < 0.9f) {
             digitalWrite(SMOKE_LED_PIN_DEVICE_3, HIGH);
           } else {
             digitalWrite(SMOKE_LED_PIN_DEVICE_3, LOW);
