@@ -4,7 +4,8 @@
 #define RS485_ID 1  // ID slave устройства (уникальный номер, чтобы различать устройства системы)
 #define RS485_DIR 10  // переключение RS485 приёмника/передатчика: LOW - "приём данных", HIGH - "передача" (RS-485 to TTL MAX)
 
-#define GERKON_PIN 4  // геркон (values: 1 = "open", 0 = "close")
+#define GERKON_PIN 3  // геркон (values: 1 = "open", 0 = "close"). Прерывание CHANGE
+volatile int stateOfGerkon = 0;  // флаг открыто/закрыто. Прерывание CHANGE
 
 #define DHT_PIN 2  // датчик температуры и влажности (DHT11)
 
@@ -29,15 +30,16 @@ void setup()
     
     dht.begin();
     
-    pinMode(GERKON_PIN, INPUT);
-    digitalWrite(GERKON_PIN, HIGH);
+    pinMode(GERKON_PIN, INPUT_PULLUP);
+
+    attachInterrupt(1, &gerkonDoorOpenCloseEventListener, CHANGE);  // (1 - 3-ий ПИН для Arduino UNO)
     
     pinMode(RS485_DIR, OUTPUT);
     digitalWrite(RS485_DIR, LOW); 
 }
 
 void loop() 
-{                                                 
+{                                                
     while (Serial.available() > 0) {  // Если есть какие либо данные в последовательном порту и ID = 1
       String strId = Serial.readString();      
       if (strId == String(RS485_ID)) {  // Проверям, что запрос пришёл на нужное slave устройство
@@ -56,8 +58,10 @@ void loop()
 }
 
 /**
-*  Example response to send to MASTER device
-*  {"id":1,"temp":23.6,"humidity":37,"door_is":"open","voltage":1.196289,"smoke":881}
+ *  Процедура опроса датчиков/сенсоров и их запись в JSON
+ *  
+ *  Example response to send to MASTER device
+ *  {"id":1,"temp":23.6,"humidity":37,"door_is":"open","voltage":1.196289,"smoke":881}
 */
 void startPollingSensors()
 {
@@ -68,9 +72,12 @@ void startPollingSensors()
     slave["voltage"] = 0.0;
     slave["smoke"] = 0;
 
-    int doorIsOpen = digitalRead(GERKON_PIN);
-    String convertIsOpenDoorValue = doorIsOpen ? "open" : "close";
-    slave["door_is"] = convertIsOpenDoorValue;   
+    if (stateOfGerkon) {
+        stateOfGerkon = 0;  // если дверь была открыта(или сейчас открыта) - сбрасываем флаг
+        slave["door_is"] = "open";
+    } else {
+        slave["door_is"] = "close";
+    }
     
     float uOut = (analogRead(VOLTAGE_PIN) * U_HIGH) / 1024.0;
     float voltage = uOut / U_REF;
@@ -88,4 +95,26 @@ void startPollingSensors()
         slave["temp"] = temp;
         slave["humidity"] = humidity;   
     }
+}
+
+
+/**
+ *  Процедура обработки прерывания для геркона
+ *  (values: 1 = "open", 0 = "close")
+*/
+void gerkonDoorOpenCloseEventListener()
+{
+    int tmpDoorIsOpen = digitalRead(GERKON_PIN);
+    
+    if (tmpDoorIsOpen == 0 && stateOfGerkon == 1) {  // если сейчас дверь закрыта, но недавно была открыта - то "open" 
+        stateOfGerkon = 1;  
+    }
+
+    if (tmpDoorIsOpen == 0 && stateOfGerkon == 0) {  // если сейчас дверь закрыта и недавно была закрыта - то "close" 
+        stateOfGerkon = 0;  
+    }
+    
+    if (tmpDoorIsOpen == 1 && stateOfGerkon == 0) {  // если сейчас дверь открыта - то "open" 
+        stateOfGerkon = 1;  
+    }       
 }
