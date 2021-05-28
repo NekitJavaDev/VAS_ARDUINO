@@ -5,17 +5,17 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);  // Для экрана 20х4 (четыре�
 
 #define RS485_DIR 10  //отправка RS485
 
-//#define GERKON_LED_PIN_DEVICE_1 A?  // slave1 
-//#define SMOKE_LED_PIN_DEVICE_1 A?  // slave1
-//#define VOLTAGE_LED_PIN_DEVICE_1 A?  // slave1
-//
-//#define GERKON_LED_PIN_DEVICE_2 A?  // slave2
-//#define SMOKE_LED_PIN_DEVICE_2 A?  // slave2
-//#define VOLTAGE_LED_PIN_DEVICE_2 A?  // slave2
-//
-//#define GERKON_LED_PIN_DEVICE_3 A?  // slave3
-//#define SMOKE_LED_PIN_DEVICE_3 A?  // slave3
-//#define VOLTAGE_LED_PIN_DEVICE_3 A?  // slave3
+#define GERKON_LED_PIN_DEVICE_1 29  // slave1 Gerkon
+#define SMOKE_LED_PIN_DEVICE_1 31  // slave1 Smoke
+#define VOLTAGE_LED_PIN_DEVICE_1 30  // slave1 Voltage
+
+#define GERKON_LED_PIN_DEVICE_2 47  // slave2 Gerkon
+#define SMOKE_LED_PIN_DEVICE_2 41  // slave2 Smoke
+#define VOLTAGE_LED_PIN_DEVICE_2 48  // slave2 Voltage
+
+//#define GERKON_LED_PIN_DEVICE_3 A?  // slave3 Gerkon
+//#define SMOKE_LED_PIN_DEVICE_3 A?  // slave3 Smoke
+//#define VOLTAGE_LED_PIN_DEVICE_3 A?  // slave3 Voltage
 
 #define interval 10000  //5000
 
@@ -29,12 +29,12 @@ void setup()
     Serial3.begin(115200);  // UART port, which send and take from slave devices
     Serial.begin(115200);
 
-    // pinMode(GERKON_LED_PIN_DEVICE_1, OUTPUT);
-    // pinMode(SMOKE_LED_PIN_DEVICE_1, OUTPUT);
-    // pinMode(VOLTAGE_LED_PIN_DEVICE_1, OUTPUT);
-    // pinMode(GERKON_LED_PIN_DEVICE_2, OUTPUT);
-    // pinMode(SMOKE_LED_PIN_DEVICE_2, OUTPUT);
-    // pinMode(VOLTAGE_LED_PIN_DEVICE_2, OUTPUT);
+    pinMode(GERKON_LED_PIN_DEVICE_1, OUTPUT);
+    pinMode(SMOKE_LED_PIN_DEVICE_1, OUTPUT);
+    pinMode(VOLTAGE_LED_PIN_DEVICE_1, OUTPUT);
+    pinMode(GERKON_LED_PIN_DEVICE_2, OUTPUT);
+    pinMode(SMOKE_LED_PIN_DEVICE_2, OUTPUT);
+    pinMode(VOLTAGE_LED_PIN_DEVICE_2, OUTPUT);
     // pinMode(GERKON_LED_PIN_DEVICE_3, OUTPUT);
     // pinMode(SMOKE_LED_PIN_DEVICE_3, OUTPUT);
     // pinMode(VOLTAGE_LED_PIN_DEVICE_3, OUTPUT);
@@ -114,11 +114,11 @@ void loop()
     */
     while (Serial3.available() > 0) {    
         DeserializationError error = deserializeJson(slave, Serial3);    
-  //        if (error) {  // Test if parsing succeeds.
-  //          Serial.print(F("deserializeJson() failed: "));
-  //          Serial.println(error.f_str());
-  //          return;
-  //        }
+//        if (error) {  // Test if parsing succeeds.
+//            Serial.print(F("deserializeJson() failed: "));
+//            Serial.println(error.f_str());
+//            return;
+//        }
         char outStrTemperature[4];
         char outStrVoltage[3];
           
@@ -136,18 +136,18 @@ void loop()
             Serial.println("Error deserialize Json!! ID = 0");
             return;          
         case 1:
-            // turnOnOrOffLedGerkonPins(1, doorIs);
-            // turnOnOrOffLedSmokePins(1, smoke);
-            // turnOnOrOffLedVoltagePins(1, voltage);
+            turnOnOrOffLedGerkonPins(1, doorIs);
+            turnOnOrOffLedSmokePins(1, smoke);
+            turnOnOrOffLedVoltagePins(1, voltage);
             lcd.setCursor(0, 0);
             lcd.print("                    "); //Очистка 1-ой строки
             lcd.setCursor(0, 0);
             lcd.print("1 T:" + String(dtostrf(temp,2,1,outStrTemperature)) + " V:" + String(dtostrf(voltage,2,1,outStrVoltage)) + " H:" + humidity + "%"); 
         break;
         case 2:
-            // turnOnOrOffLedGerkonPins(2, doorIs);
-            // turnOnOrOffLedSmokePins(2, smoke);
-            // turnOnOrOffLedVoltagePins(2, voltage);
+            turnOnOrOffLedGerkonPins(2, doorIs);
+            turnOnOrOffLedSmokePins(2, smoke);
+            turnOnOrOffLedVoltagePins(2, voltage);
             lcd.setCursor(0, 1);
             lcd.print("                    "); //Очистка 2-ой строки
             lcd.setCursor(0, 1);
@@ -212,8 +212,6 @@ void sendCmdRS485(int id, int cmd)
     digitalWrite(RS485_DIR, LOW);
 }
 
-/*
-
 void turnOnOrOffLedGerkonPins(int deviceId, String doorIs) {
     switch (deviceId) {
         case 1:
@@ -240,18 +238,18 @@ void turnOnOrOffLedGerkonPins(int deviceId, String doorIs) {
               Serial.println(doorIs);            
             }
         break;
-        case 3:
-            if (doorIs == "open") {
-              digitalWrite(GERKON_LED_PIN_DEVICE_3, HIGH);
-            } else if (doorIs == "close") {
-              digitalWrite(GERKON_LED_PIN_DEVICE_3, LOW);
-            } else {
-              Serial.print("Error turning on/off LED GERKON pin with ID device = ");
-              Serial.print(deviceId);
-              Serial.print(" and door's GERKON value = "); 
-              Serial.println(doorIs);            
-            }
-        break;
+//        case 3:
+//            if (doorIs == "open") {
+//              digitalWrite(GERKON_LED_PIN_DEVICE_3, HIGH);
+//            } else if (doorIs == "close") {
+//              digitalWrite(GERKON_LED_PIN_DEVICE_3, LOW);
+//            } else {
+//              Serial.print("Error turning on/off LED GERKON pin with ID device = ");
+//              Serial.print(deviceId);
+//              Serial.print(" and door's GERKON value = "); 
+//              Serial.println(doorIs);            
+//            }
+//        break;
         default:
             Serial.print("Error turning on/off LED GERKON pin with ID device = ");
             Serial.println(deviceId);  
@@ -275,13 +273,13 @@ void turnOnOrOffLedSmokePins(int deviceId, int smoke) {
             digitalWrite(SMOKE_LED_PIN_DEVICE_2, LOW);
           }
         break;
-        case 3:
-          if (smoke > 700) {
-            digitalWrite(SMOKE_LED_PIN_DEVICE_3, HIGH);
-          } else {
-            digitalWrite(SMOKE_LED_PIN_DEVICE_3, LOW);
-          }
-        break;
+//        case 3:
+//          if (smoke > 700) {
+//            digitalWrite(SMOKE_LED_PIN_DEVICE_3, HIGH);
+//          } else {
+//            digitalWrite(SMOKE_LED_PIN_DEVICE_3, LOW);
+//          }
+//        break;
         default:
             Serial.print("Error turning on/off SMOKE GERKON pin with ID device = ");
             Serial.println(deviceId);  
@@ -290,37 +288,35 @@ void turnOnOrOffLedSmokePins(int deviceId, int smoke) {
 }
 
 void turnOnOrOffLedVoltagePins(int deviceId, float voltage) {
-    switch (voltage) {
+    switch (deviceId) {
         case 0:
             Serial.print("Battery not connected or voltage = 0 on ID device = ");
             Serial.println(deviceId); 
         break;
         case 1:
-            if (voltage < 0.9f) {
+            if (voltage < 0.8f) {
               digitalWrite(SMOKE_LED_PIN_DEVICE_1, HIGH);
             } else {
               digitalWrite(SMOKE_LED_PIN_DEVICE_1, LOW);
             }
         break;      
         case 2:
-          if (voltage < 0.9f) {
+          if (voltage < 0.8f) {
             digitalWrite(SMOKE_LED_PIN_DEVICE_2, HIGH);
           } else {
             digitalWrite(SMOKE_LED_PIN_DEVICE_2, LOW);
           }
         break;
-        case 3:
-          if (voltage < 0.9f) {
-            digitalWrite(SMOKE_LED_PIN_DEVICE_3, HIGH);
-          } else {
-            digitalWrite(SMOKE_LED_PIN_DEVICE_3, LOW);
-          }
-        break;
+//        case 3:
+//          if (voltage < 0.8f) {
+//            digitalWrite(SMOKE_LED_PIN_DEVICE_3, HIGH);
+//          } else {
+//            digitalWrite(SMOKE_LED_PIN_DEVICE_3, LOW);
+//          }
+//        break;
         default:
             Serial.print("Error turning on/off VOLTAGE GERKON pin with ID device = ");
             Serial.println(deviceId);  
         break;
     }
 }
-
-*/

@@ -115,7 +115,7 @@
 <p align="center">
   <img src="https://github.com/NekitJavaDev/VAS_ARDUINO/blob/master/src/img/october/4_%D1%81%D1%85%D0%B5%D0%BC%D0%B0_%D0%BF%D0%BE%D0%B4%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D1%8F_Voltage_Sensor_%D0%BA_Arduino_%D0%B8_%D0%BA_%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D1%8F%D0%B5%D0%BC%D0%BE%D0%BC%D1%83_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BA%D1%83_%D1%86%D0%B5%D0%BF%D0%B8.jpg"/>
 </p>
-<p align="center">Рисунок 4 — Схема подключения Voltage Sensor к Arduino и к измеряемому участку цепи </p>
+<p align="center">Рисунок 4 — Схема подключения Voltage Sensor к Arduino и к измеряемому участку цепи</p>
 
 #### 3. Разработка, тестирование и отладка программного обеспечения для разрабатываемого модуля.
 
@@ -137,8 +137,6 @@
     float Uin = U_REF * ((R1_VOLTAGE + R2_VOLTAGE) / R2_VOLTAGE);
 ```
 В функцию setup() добавляем, что аналоговый пин A4 работает на вход, то есть будет считывать показания:
-
-
 ```C++  
     void setup() {
     ------------------------------------------------------------
