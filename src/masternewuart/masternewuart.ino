@@ -125,7 +125,7 @@ void loop()
         float temp = slave["temp"];
         String doorIs = slave["door_is"];
         float voltage = slave["voltage"];
-        int smoke = slave["smoke"];
+        float smoke = slave["smoke"];
         int humidity = slave["humidity"];
 
         Serial.println("I recieved JSON:");
@@ -228,26 +228,26 @@ void turnOnOrOffLedGerkonPins(int deviceId, String doorIs) {
         break;      
         case 2:
             if (doorIs == "open") {
-              digitalWrite(GERKON_LED_PIN_DEVICE_2, HIGH);
+                digitalWrite(GERKON_LED_PIN_DEVICE_2, HIGH);
             } else if (doorIs == "close") {
-              digitalWrite(GERKON_LED_PIN_DEVICE_2, LOW);
+                digitalWrite(GERKON_LED_PIN_DEVICE_2, LOW);
             } else {
-              Serial.print("Error turning on/off LED GERKON pin with ID device = ");
-              Serial.print(deviceId);
-              Serial.print(" and door's GERKON value = "); 
-              Serial.println(doorIs);            
+                Serial.print("Error turning on/off LED GERKON pin with ID device = ");
+                Serial.print(deviceId);
+                Serial.print(" and door's GERKON value = "); 
+                Serial.println(doorIs);            
             }
         break;
 //        case 3:
 //            if (doorIs == "open") {
-//              digitalWrite(GERKON_LED_PIN_DEVICE_3, HIGH);
+//                digitalWrite(GERKON_LED_PIN_DEVICE_3, HIGH);
 //            } else if (doorIs == "close") {
-//              digitalWrite(GERKON_LED_PIN_DEVICE_3, LOW);
+//                digitalWrite(GERKON_LED_PIN_DEVICE_3, LOW);
 //            } else {
-//              Serial.print("Error turning on/off LED GERKON pin with ID device = ");
-//              Serial.print(deviceId);
-//              Serial.print(" and door's GERKON value = "); 
-//              Serial.println(doorIs);            
+//                Serial.print("Error turning on/off LED GERKON pin with ID device = ");
+//                Serial.print(deviceId);
+//                Serial.print(" and door's GERKON value = "); 
+//                Serial.println(doorIs);            
 //            }
 //        break;
         default:
@@ -260,25 +260,25 @@ void turnOnOrOffLedGerkonPins(int deviceId, String doorIs) {
 void turnOnOrOffLedSmokePins(int deviceId, int smoke) {
     switch (deviceId) {
         case 1:
-            if (smoke > 700) {
-              digitalWrite(SMOKE_LED_PIN_DEVICE_1, HIGH);
+            if (smoke > 600) {
+                digitalWrite(SMOKE_LED_PIN_DEVICE_1, HIGH);
             } else {
-              digitalWrite(SMOKE_LED_PIN_DEVICE_1, LOW);
+                digitalWrite(SMOKE_LED_PIN_DEVICE_1, LOW);
             }
         break;      
         case 2:
-          if (smoke > 700) {
-            digitalWrite(SMOKE_LED_PIN_DEVICE_2, HIGH);
-          } else {
-            digitalWrite(SMOKE_LED_PIN_DEVICE_2, LOW);
-          }
+            if (smoke > 600) {
+                digitalWrite(SMOKE_LED_PIN_DEVICE_2, HIGH);
+            } else {
+                digitalWrite(SMOKE_LED_PIN_DEVICE_2, LOW);
+            }
         break;
 //        case 3:
-//          if (smoke > 700) {
-//            digitalWrite(SMOKE_LED_PIN_DEVICE_3, HIGH);
-//          } else {
-//            digitalWrite(SMOKE_LED_PIN_DEVICE_3, LOW);
-//          }
+//            if (smoke > 600) {
+//                digitalWrite(SMOKE_LED_PIN_DEVICE_3, HIGH);
+//            } else {
+//                digitalWrite(SMOKE_LED_PIN_DEVICE_3, LOW);
+//            }
 //        break;
         default:
             Serial.print("Error turning on/off SMOKE GERKON pin with ID device = ");
@@ -294,25 +294,25 @@ void turnOnOrOffLedVoltagePins(int deviceId, float voltage) {
             Serial.println(deviceId); 
         break;
         case 1:
-            if (voltage < 0.8f) {
-              digitalWrite(SMOKE_LED_PIN_DEVICE_1, HIGH);
+            if (voltage < .9f) {
+                digitalWrite(VOLTAGE_LED_PIN_DEVICE_1, HIGH);
             } else {
-              digitalWrite(SMOKE_LED_PIN_DEVICE_1, LOW);
+                digitalWrite(VOLTAGE_LED_PIN_DEVICE_1, LOW);
             }
         break;      
         case 2:
-          if (voltage < 0.8f) {
-            digitalWrite(SMOKE_LED_PIN_DEVICE_2, HIGH);
-          } else {
-            digitalWrite(SMOKE_LED_PIN_DEVICE_2, LOW);
-          }
+            if (voltage < .9f) {
+                digitalWrite(VOLTAGE_LED_PIN_DEVICE_2, HIGH);
+            } else {
+                digitalWrite(VOLTAGE_LED_PIN_DEVICE_2, LOW);
+            }
         break;
 //        case 3:
-//          if (voltage < 0.8f) {
-//            digitalWrite(SMOKE_LED_PIN_DEVICE_3, HIGH);
-//          } else {
-//            digitalWrite(SMOKE_LED_PIN_DEVICE_3, LOW);
-//          }
+//            if (voltage < 0.9f) {
+//                digitalWrite(VOLTAGE_LED_PIN_DEVICE_3, HIGH);
+//            } else {
+//                digitalWrite(VOLTAGE_LED_PIN_DEVICE_3, LOW);
+//            }
 //        break;
         default:
             Serial.print("Error turning on/off VOLTAGE GERKON pin with ID device = ");
