@@ -54,6 +54,6 @@
 
 <p align="center">
 	<video width="320" height="240" controls>
-  	  <source src="src\video\Опрос_устройств_макет_arduino_ХмыровНА_июнь.mp4" type="video/mp4">
+		<a href="https://github.com/NekitJavaDev/VAS_ARDUINO/blob/master/src/video/%D0%9E%D0%BF%D1%80%D0%BE%D1%81_%D1%83%D1%81%D1%82%D1%80%D0%BE%D0%B9%D1%81%D1%82%D0%B2_%D0%BC%D0%B0%D0%BA%D0%B5%D1%82_arduino_%D0%A5%D0%BC%D1%8B%D1%80%D0%BE%D0%B2%D0%9D%D0%90_%D0%B8%D1%8E%D0%BD%D1%8C.mp4" title="Link Title"><img src="{image-url}" alt="Alternate Text" /></a>
 	</video>
 </p>
