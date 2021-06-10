@@ -34,18 +34,19 @@
 
 #### Аппаратная состовляющая системы:
 
-* Arduino MEGA 2560 ~~Arduino NANO~~ - управляющее устройство 
-* Arduino UNO/ Arduino UNO R3 ~~Arduino WAVGAT UNO R3, Arduino Nano~~ - управляемые устройства
+* Arduino MEGA 2560 ~~Arduino NANO~~ - управляющее (master) устройство 
+* Arduino UNO/ Arduino UNO R3 ~~Arduino WAVGAT UNO R3, Arduino Nano~~ - управляемые (slave) устройства
 * Arduino Voltage Sensor - датчик измерения напряжения в сети 
 * Arduino модуль с герконом - датчик магнитного поля с герконом пороговый LM393
-* Датчик температуры и влажности DHT11 ~~DS18B20~~ - цифровой измеритель температуры, с  разрешением преобразования 9 - 12 разрядов
+* Датчик температуры и влажности DHT11 ~~DS18B20~~
 * Модуль GPRS/GSM Goouuu GA6 mini A6 SIM800L - модуль обмена данными с мобильными устройствами по GSM каналу
 * AC/DC Adapter 12V для питания GSM модуля
 * Arduino VGA OV7670 - модуль камеры
 * Arduino MQ-2 - датчик дыма (углеводородные газы, дым)
-* Arduino дисплей LCD 2004A 20x4 ~~PCD8544 NOKIA5110~~ - дисплей с синей подстветкой
-* Модуль RS485 (MAX485) - Конвертер TTL в RS485(max485) для обмена данными между всеми устройствами
-* Резисторы на 220Ом, 330Ом
+* Arduino дисплей LCD 2004A 20x4 с синей подстветкой ~~PCD8544 NOKIA5110~~
+* Модуль RS485 (MAX485) - Конвертер TTL в RS485(max485)
+* Жильные провода из UTP Eternet кабеля
+* Резисторы на 220 Ом, 330 Ом
 * Led светодиоды 5мм (красный, зелёный)
 * COM to USB провода - для заливки прошивки в Arduino
 * ~~Breadboard + провода (мама-папа, папа-папа, мама-мама)~~
@@ -53,6 +54,6 @@
 
 <p align="center">
 	<video width="320" height="240" controls>
-  	  <source src="https://github.com/NekitJavaDev/VAS_ARDUINO/blob/master/src/video/%D0%9E%D0%BF%D1%80%D0%BE%D1%81_%D1%83%D1%81%D1%82%D1%80%D0%BE%D0%B9%D1%81%D1%82%D0%B2_%D0%BC%D0%B0%D0%BA%D0%B5%D1%82_arduino_%D0%A5%D0%BC%D1%8B%D1%80%D0%BE%D0%B2%D0%9D%D0%90_%D0%B8%D1%8E%D0%BD%D1%8C.mp4" type="video/mp4">
+  	  <source src="src\video\Опрос_устройств_макет_arduino_ХмыровНА_июнь.mp4" type="video/mp4">
 	</video>
 </p>
